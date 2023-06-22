@@ -1,0 +1,22 @@
+--Create a clothing store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, item TEXT, size TEXT, quantity INTEGER,  price INTEGER);
+
+INSERT INTO store VALUES (1, "shirts", "small", 40, 25.99);
+INSERT INTO store VALUES (2, "shirts", "medium", 30, 25.99);
+INSERT INTO store VALUES (3, "shirts", "large", 25, 25.99);
+INSERT INTO store VALUES (4, "shorts", "small", 18, 15.99);
+INSERT INTO store VALUES (5, "shorts", "medium", 22, 15.99);
+INSERT INTO store VALUES (6, "shorts", "large", 34, 15.99);
+INSERT INTO store VALUES (7, "socks", "small", 50, 2.99);
+INSERT INTO store VALUES (8, "socks", "medium", 35, 2.99);
+INSERT INTO store VALUES (9, "socks", "large", 60, 2.99);
+INSERT INTO store VALUES (10, "underwear", "small", 6, 8.99);
+INSERT INTO store VALUES (11, "underwear", "medium", 6, 8.99);
+INSERT INTO store VALUES (12, "underwear", "large", 36, 8.99);
+
+--Display the database order by price 
+SELECT * FROM store ORDER BY price; 
+
+--What is the sum of all items?
+SELECT item, SUM(quantity) FROM store GROUP BY item;
