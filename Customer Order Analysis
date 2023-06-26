@@ -43,7 +43,7 @@ SELECT product, SUM(Quantity * price), SUM(Quantity) as Tota_Quantity
 FROM BIT_DB.FebSales
 WHERE length(orderID) = 6
 AND orderID <> 'Order ID'
-AND location = '548 Lincoln St, Seattle, WA 98101'
+AND location = '548 Lincoln St, Seattle, WA 98101';
 
 -- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
 SELECT COUNT(DISTINCT c.acctnum), AVG(fs.Quantity * price) as Average_Spent
