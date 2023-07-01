@@ -1,0 +1,88 @@
+-- First exercise from Practical SQL. All the litte notes and comments are my notes from the book. 
+-- Created a table and inserted data into that table, also going to add all the other exercises related to the Teachers table we created. 
+
+CREATE DATABASE analysis; --Created our Database we will be using for analysis. 
+
+CREATE TABLE teachers (
+	id bigserial, -- auto-increments everytime you add a row to the table
+	first_name varchar(25), -- text column with maximum length 25 for this instance
+	last_name varchar(50), 
+	school varchar(50),
+	hire_date date,
+	salary numeric
+);
+
+-- inserting data manually into the table
+INSERT INTO teachers (first_name, last_name, school, hire_date, salary)
+VALUES ('Janet', 'Smith', 'F.D. Roosevelt HS', '2011-10-30', 36200),
+ ('Lee', 'Reynolds', 'F.D. Roosevelt HS', '1993-05-22', 65000),
+ ('Samuel', 'Cole', 'Myers Middle School', '2005-08-01', 43500),
+ ('Samantha', 'Bush', 'Myers Middle School', '2011-10-30', 36200),
+ ('Betty', 'Diaz', 'Myers Middle School', '2005-08-30', 43500),
+ ('Kathleen', 'Roush', 'F.D. Roosevelt HS', '2010-10-22', 38500);
+
+-- Different ways to query the whole table. We can view the table from pgAdmin by right-clicking the teachers table in the object tree and choosing View
+TABLE teachers;
+
+SELECT * FROM teachers;
+
+-- We can view the table from pgAdmin by right-clicking the teachers table in the object tree and choosing View/Edit Data -> All Rows. 
+
+-- We start interviewing the data by using a basic query to check if their is any missing data and getting familiar with the data types. 
+SELECT last_name, first_name, salary 
+FROM teachers;
+
+-- Using the keyword descend. 
+SELECT last_name, first_name, salary 
+FROM teachers
+ORDER BY salary DESC;
+
+-- We can also use a number from our SELECT column to ORDER BY. 
+SELECT last_name, first_name, salary
+FROM teachers
+ORDER BY 3 DESC; -- the three is ordering by the third SELECT column we used. 
+
+-- We are not limited to sorting by just one column, however, it is most useful to limit the columns to answer specific questions by running several queries. 
+-- We ordered by the schools with the newly hired teachers listed first. 
+SELECT last_name, school, hire_date
+FROM teachers
+ORDER BY school ASC, hire_date DESC;
+
+-- Querying using DISTINCT. A perfect way to ask for each x in the table, what are all the y values? 
+SELECT DISTINCT school
+FROM teachers
+ORDER BY school;
+
+--we can use DISTINCT with more than one column
+SELECT DISTINCT school, salary
+FROM teachers
+ORDER BY school, salary;
+
+-- practice with WHERE clauses and different operators. 
+SELECT last_name, shcool, hire_date
+FROM teachers 
+WHERE school = 'Myers Middle School';
+
+SELECT first_name, last_name, school
+FROM teachers
+WHERE first_name = 'Janet';
+
+SELECT school 
+FROM teachers
+WHERE school <> 'F.D. Roosevelt HS';
+
+SELECT first_name, last_name, hire_date
+FROM teachers
+WHERE hire_date < '2000-01-01';
+
+SELECT first_name, last_name, salary
+FROM teachers
+WHERE salary >= 43500;
+
+SELECT first_name, last_name, school, salary
+FROM teachers
+WHERE salary BETWEEN 40000 AND 65000;
+
+SELECT first_name, last_name, school, salary
+WHERE teachers
+WHERE salary >= 40000 AND salary <= 65000; 
