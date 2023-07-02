@@ -86,3 +86,48 @@ WHERE salary BETWEEN 40000 AND 65000;
 SELECT first_name, last_name, school, salary
 WHERE teachers
 WHERE salary >= 40000 AND salary <= 65000; 
+
+-- LIKE and ILIKE 
+SELECT first_name
+FROM teachers 
+WHERE first_name LIKE 'sam%'; -- case sensitive 
+
+SELECT first_name
+FROM teachers
+WHERE first_name ILIKE 'sam%'; -- case insensitive 
+
+--Differences between AND and OR operator. AND has to meet both conditions and OR only one condition. 
+SELECT *
+FROM teachers
+WHERE school = 'Myers Middle School'
+		AND salary < 4000;
+
+SELECT *
+FROM teachers 
+WHERE last_name = 'Cole'
+		OR last_name = 'Bush';
+
+-- Without the parathesis it will evaluate salaries above 40k no matter what school. 
+SELECT *
+FROM teachers
+WHERE school = 'F.D. Roosevelt HS'
+		AND (salary < 38000 OR salary > 40000) 
+
+-- The school district superintendent asks for a list of teachers in each school. 
+-- Write a query that lists the schools in alphabetical order along with teachers ordered by last name A–Z.
+SELECT DISTINCT last_name, school
+FROM teachers
+ORDER BY school ASC, last_name ASC;
+
+-- Write a query that finds the one teacher whose first name starts with the letter S and who earns more than $40,000.
+SELECT first_name, salary
+FROM teachers
+WHERE first_name ILIKE 'S%'
+		AND salary > 40000;
+
+-- Rank teachers hired since January 1, 2010, ordered by highest paid to lowest.
+SELECT first_name, last_name, hire_date, salary
+FROM teachers 
+WHERE hire_date > '2010-01-01'
+ORDER BY salary DESC; 
+
