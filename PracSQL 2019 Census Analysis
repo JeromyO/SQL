@@ -1,0 +1,57 @@
+-- In this SQL project, I analyzed data from 2019 Census using PostgreSQL and pgAdmin. 
+
+-- Table creation 
+CREATE TABLE us_counties_pop_est_2019 (
+	state_fips text,
+	county_fips text, 
+	region smallint,
+	state_name text,
+	county_name text,
+ 	area_land bigint,
+ 	area_water bigint,
+ 	internal_point_lat numeric(10,7),
+ 	internal_point_lon numeric(10,7),
+ 	pop_est_2018 integer,
+ 	pop_est_2019 integer,
+ 	births_2019 integer,
+ 	deaths_2019 integer,
+ 	international_migr_2019 integer,
+ 	domestic_migr_2019 integer,
+ 	residual_2019 integer,
+	CONSTRAINT counties_2019_key PRIMARY KEY (state_fips, county_fips)
+);
+
+-- Using COPY to bring in the data from my computer. 
+COPY us_counties_pop_est_2019
+FROM 'C:\Users\jerom\OneDrive\Documents\SQL Class\practical-sql-2-main\practical-sql-2-main\Chapter_05\us_counties_pop_est_2019.csv'
+WITH (FORMAT CSV, HEADER);
+
+-- Inspecting the import. 
+SELECT * 
+FROM us_counties_pop_est_2019;
+
+-- Show the top 3 counties with the largest area of land. 
+SELECT county_name, state_name, area_land
+FROM us_counties_pop_est_2019
+ORDER BY area_land DESC
+LIMIT 3;
+
+-- Exporting all the data to another file and setting the delimiter as '|' instead of a comma. 
+COPY us_counties_pop_est_2019
+TO 'C:\Users\jerom\OneDrive\Documents\SQL Class\practical-sql-2-main\practical-sql-2-main\Chapter_05\us_counties_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+-- Exporting only set of columns 
+COPY us_counties_pop_est_2019
+ (county_name, internal_point_lat, internal_point_lon)
+TO 'C:\Users\jerom\OneDrive\Documents\SQL Class\practical-sql-2-main\practical-sql-2-main\Chapter_05\us_counties_latlon_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+-- Exporting name and state of counties only containing letters mill
+COPY (
+  SELECT county_name, state_name
+	FROM us_counties_pop_est_2019
+	WHERE county_name ILIKE '%mill%' -- ILIKE is case-insensitive 
+	)
+TO 'C:\Users\jerom\OneDrive\Documents\SQL Class\practical-sql-2-main\practical-sql-2-main\Chapter_05\us_counties_mill_export.csv'
+WITH (FORMAT CSV, HEADER);
