@@ -55,3 +55,49 @@ COPY (
 	)
 TO 'C:\Users\jerom\OneDrive\Documents\SQL Class\practical-sql-2-main\practical-sql-2-main\Chapter_05\us_counties_mill_export.csv'
 WITH (FORMAT CSV, HEADER);
+
+-- Subtraction, natural increase taking births - deaths 
+SELECT county_name AS county,
+ state_name AS state,
+ births_2019 AS births,
+ deaths_2019 AS deaths,
+ births_2019 - deaths_2019 AS natural_increase
+FROM us_counties_pop_est_2019
+ORDER BY state_name, county_name;
+
+-- Percentage of area made of water for each county. ":: casting to numeric."
+SELECT county_name AS county, 
+	state_name AS state, 
+	area_water::numeric / (area_land + area_water) * 100 AS pct_water
+FROM us_counties_pop_est_2019
+ORDER BY pct_water DESC;
+
+-- Total population of all counties and the average of all counties 
+SELECT SUM(pop_est_2019) AS county_sum,
+	ROUND(AVG(pop_est_2019), 0) AS county_average
+FROM us_counties_pop_est_2019;
+
+-- Comparing the data with sum, average, and median
+-- Shows how the average can be misleading due to outliers 
+SELECT SUM(pop_est_2019) AS county_sum,
+	ROUND(AVG(pop_est_2019), 0) AS county_average,
+	percentile_cont(.5)
+	WITHIN GROUP (ORDER BY pop_est_2019) AS county_median
+FROM us_counties_pop_est_2019;
+
+-- Using an array to pass values into percentile_cont()
+-- First quartile (25 percent of counties have population equal to or lower than this value, and so on)
+SELECT percentile_cont(ARRAY[.25, .5, .75])
+	WITHIN GROUP (ORDER BY pop_est_2019) AS quartiles
+FROM us_counties_pop_est_2019;
+
+-- a nice way to unnest the array to have the results return in rows.
+SELECT unnest ( 
+	percentile_cont(ARRAY[.25, .5, .75])
+	WITHIN GROUP (ORDER BY pop_est_2019)
+	) AS quartiles
+FROM us_counties_pop_est_2019;
+
+-- Mode function in PostgreSQL
+SELECT mode() WITHIN GROUP (ORDER BY births_2019)
+FROM us_counties_pop_est_2019;
